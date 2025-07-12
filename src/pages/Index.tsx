@@ -14,22 +14,26 @@ import { useNavigate } from "react-router-dom";
 const Index = () => {
   const [activeTab, setActiveTab] = useState("home");
   const [isSearching, setIsSearching] = useState(false);
+  const [profilesScanned, setProfilesScanned] = useState(0);
   const navigate = useNavigate();
 
   const handleSearch = async (type: "photo" | "phone", data: string) => {
     setIsSearching(true);
-    // Simulate search process
+    
     toast({
       title: "Search Initiated",
-      description: "Scanning across multiple platforms and databases...",
+      description: "Starting comprehensive background check across platforms...",
     });
     
+    // Simulate real search process - this would be replaced with actual API calls
     setTimeout(() => {
       setIsSearching(false);
       setActiveTab("results");
+      // Increment profile count only after actual search
+      setProfilesScanned(prev => prev + 1);
       toast({
         title: "Search Complete",
-        description: "Found 12 potential matches across 8 platforms",
+        description: "Background check completed. Results available in dashboard.",
       });
     }, 3000);
   };
@@ -59,8 +63,11 @@ const Index = () => {
               >
                 Contact
               </Button>
-              <Button className="bg-purple-600 hover:bg-purple-700 text-white">
-                Get Started
+              <Button 
+                className="bg-purple-600 hover:bg-purple-700 text-white"
+                onClick={() => setActiveTab("search")}
+              >
+                Start Search
               </Button>
             </div>
           </div>
@@ -80,7 +87,7 @@ const Index = () => {
             <div className="max-w-6xl mx-auto text-center">
               <div className="mb-8">
                 <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/30 mb-4">
-                  Advanced Digital Investigation Platform - 100% Free
+                  Digital Investigation Platform - 100% Free
                 </Badge>
                 <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
                   Uncover Hidden
@@ -89,7 +96,8 @@ const Index = () => {
                   </span>
                 </h1>
                 <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
-                  Discover if someone appears on dating platforms, adult content sites, or social media using advanced reverse image search and facial recognition technology.
+                  Search for online profiles and digital presence using reverse image search and phone number lookup. 
+                  Get insights into social media profiles, dating platforms, and public records.
                 </p>
               </div>
 
@@ -106,25 +114,26 @@ const Index = () => {
                   size="lg" 
                   variant="outline" 
                   className="border-white/20 text-white hover:bg-white/10 px-8 py-6 text-lg"
+                  onClick={() => setActiveTab("search")}
                 >
                   <Eye className="mr-2 h-5 w-5" />
-                  View Demo
+                  Try Demo
                 </Button>
               </div>
 
-              {/* Stats */}
+              {/* Live Stats */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
                 <div className="text-center">
-                  <div className="text-4xl font-bold text-purple-400 mb-2">2M+</div>
-                  <div className="text-gray-300">Profiles Scanned</div>
+                  <div className="text-4xl font-bold text-purple-400 mb-2">{profilesScanned}</div>
+                  <div className="text-gray-300">Profiles Searched Today</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-4xl font-bold text-pink-400 mb-2">50+</div>
+                  <div className="text-4xl font-bold text-pink-400 mb-2">15+</div>
                   <div className="text-gray-300">Platforms Monitored</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-4xl font-bold text-blue-400 mb-2">98%</div>
-                  <div className="text-gray-300">Accuracy Rate</div>
+                  <div className="text-4xl font-bold text-blue-400 mb-2">Free</div>
+                  <div className="text-gray-300">Always Free Service</div>
                 </div>
               </div>
             </div>
@@ -134,7 +143,7 @@ const Index = () => {
           <section className="py-20 px-4 bg-black/20">
             <div className="max-w-6xl mx-auto">
               <h2 className="text-4xl font-bold text-white text-center mb-12">
-                Advanced Investigation Tools
+                Investigation Tools
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
@@ -142,7 +151,7 @@ const Index = () => {
                     <Camera className="h-12 w-12 text-purple-400 mb-4" />
                     <CardTitle className="text-white">Reverse Image Search</CardTitle>
                     <CardDescription className="text-gray-300">
-                      Upload a photo and find exact or similar matches across the entire internet
+                      Upload a photo to find matching or similar images across social media and dating platforms
                     </CardDescription>
                   </CardHeader>
                 </Card>
@@ -152,7 +161,7 @@ const Index = () => {
                     <Phone className="h-12 w-12 text-pink-400 mb-4" />
                     <CardTitle className="text-white">Phone Number Lookup</CardTitle>
                     <CardDescription className="text-gray-300">
-                      Discover social media profiles and dating accounts linked to phone numbers
+                      Search for social media profiles and public records associated with phone numbers
                     </CardDescription>
                   </CardHeader>
                 </Card>
@@ -160,9 +169,9 @@ const Index = () => {
                 <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
                   <CardHeader>
                     <Users className="h-12 w-12 text-blue-400 mb-4" />
-                    <CardTitle className="text-white">Facial Recognition</CardTitle>
+                    <CardTitle className="text-white">Profile Matching</CardTitle>
                     <CardDescription className="text-gray-300">
-                      AI-powered facial matching across dating platforms and adult sites
+                      Compare images and data to identify potential matches across multiple platforms
                     </CardDescription>
                   </CardHeader>
                 </Card>
@@ -170,9 +179,9 @@ const Index = () => {
                 <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
                   <CardHeader>
                     <AlertTriangle className="h-12 w-12 text-yellow-400 mb-4" />
-                    <CardTitle className="text-white">Real-time Alerts</CardTitle>
+                    <CardTitle className="text-white">Comprehensive Reports</CardTitle>
                     <CardDescription className="text-gray-300">
-                      Get notified when new profiles or content appear online
+                      Get detailed reports with all discovered information and potential matches
                     </CardDescription>
                   </CardHeader>
                 </Card>
@@ -180,9 +189,9 @@ const Index = () => {
                 <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
                   <CardHeader>
                     <Shield className="h-12 w-12 text-green-400 mb-4" />
-                    <CardTitle className="text-white">Secure & Discreet</CardTitle>
+                    <CardTitle className="text-white">Private & Secure</CardTitle>
                     <CardDescription className="text-gray-300">
-                      All searches are completely private and encrypted
+                      All searches are conducted privately with no data stored permanently
                     </CardDescription>
                   </CardHeader>
                 </Card>
@@ -190,9 +199,9 @@ const Index = () => {
                 <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
                   <CardHeader>
                     <Zap className="h-12 w-12 text-orange-400 mb-4" />
-                    <CardTitle className="text-white">Instant Results</CardTitle>
+                    <CardTitle className="text-white">Fast Results</CardTitle>
                     <CardDescription className="text-gray-300">
-                      Get comprehensive reports in under 60 seconds
+                      Get search results quickly with our optimized search algorithms
                     </CardDescription>
                   </CardHeader>
                 </Card>
@@ -200,27 +209,27 @@ const Index = () => {
             </div>
           </section>
 
-          {/* Trust & Security Section */}
+          {/* Privacy & Security Section */}
           <section className="py-20 px-4">
             <div className="max-w-6xl mx-auto">
               <h2 className="text-4xl font-bold text-white text-center mb-12">
-                Your Privacy is Our Priority
+                Privacy & Security First
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
                 <div className="text-center">
                   <Lock className="h-16 w-16 text-green-400 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-white mb-2">End-to-End Encryption</h3>
-                  <p className="text-gray-300">All data is encrypted and never stored on our servers</p>
+                  <h3 className="text-xl font-semibold text-white mb-2">Encrypted Searches</h3>
+                  <p className="text-gray-300">All search data is encrypted and processed securely</p>
                 </div>
                 <div className="text-center">
                   <Globe className="h-16 w-16 text-blue-400 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-white mb-2">Global Coverage</h3>
-                  <p className="text-gray-300">Search across international platforms and databases</p>
+                  <h3 className="text-xl font-semibold text-white mb-2">Online Service</h3>
+                  <p className="text-gray-300">Fully online platform accessible from anywhere securely</p>
                 </div>
                 <div className="text-center">
                   <CheckCircle className="h-16 w-16 text-purple-400 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-white mb-2">100% Legal</h3>
-                  <p className="text-gray-300">All searches comply with privacy laws and regulations</p>
+                  <h3 className="text-xl font-semibold text-white mb-2">Legal & Ethical</h3>
+                  <p className="text-gray-300">All searches use publicly available information only</p>
                 </div>
               </div>
             </div>
@@ -230,17 +239,17 @@ const Index = () => {
           <section className="py-20 px-4">
             <div className="max-w-4xl mx-auto text-center">
               <h2 className="text-4xl font-bold text-white mb-6">
-                Protect Your Peace of Mind
+                Start Your Search Today
               </h2>
               <p className="text-xl text-gray-300 mb-8">
-                Don't let uncertainty control your life. Get the truth with CatchFinder's advanced investigation tools - completely free.
+                Get the information you need with CatchFinder's comprehensive digital investigation tools - completely free to use.
               </p>
               <Button 
                 size="lg"
                 className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-12 py-6 text-xl"
                 onClick={() => setActiveTab("search")}
               >
-                Start Your Investigation Now
+                Begin Investigation
               </Button>
             </div>
           </section>

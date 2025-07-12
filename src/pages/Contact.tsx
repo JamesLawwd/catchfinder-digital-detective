@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Shield, Mail, MessageSquare, Phone, MapPin, Clock } from "lucide-react";
+import { Shield, Mail, MessageSquare, Phone, Clock, Globe } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
@@ -78,7 +78,7 @@ const Contact = () => {
           </h1>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
             Have questions about our services? Need technical support? Want to report an issue? 
-            We're here to help you 24/7.
+            We're here to help you through our online support channels.
           </p>
         </div>
 
@@ -165,46 +165,30 @@ const Contact = () => {
 
             <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
               <CardHeader>
-                <Phone className="h-8 w-8 text-green-400 mb-2" />
-                <CardTitle className="text-white">Phone Support</CardTitle>
-                <CardDescription className="text-gray-300">
-                  Speak directly with our support team
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-purple-400 font-semibold">+1 (555) 123-FIND</p>
-                <p className="text-gray-300 text-sm mt-2">Available 24/7</p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
-              <CardHeader>
                 <Clock className="h-8 w-8 text-yellow-400 mb-2" />
-                <CardTitle className="text-white">Live Chat</CardTitle>
+                <CardTitle className="text-white">Support Hours</CardTitle>
                 <CardDescription className="text-gray-300">
-                  Instant support through our website chat
+                  When our support team is available
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-purple-400 font-semibold">Available on website</p>
-                <p className="text-gray-300 text-sm mt-2">Monday - Friday, 9 AM - 9 PM EST</p>
+                <p className="text-purple-400 font-semibold">Monday - Friday</p>
+                <p className="text-gray-300 text-sm mt-1">9:00 AM - 6:00 PM EST</p>
+                <p className="text-gray-300 text-sm mt-3">Email support available 24/7</p>
               </CardContent>
             </Card>
 
             <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
               <CardHeader>
-                <MapPin className="h-8 w-8 text-red-400 mb-2" />
-                <CardTitle className="text-white">Office Location</CardTitle>
+                <Globe className="h-8 w-8 text-green-400 mb-2" />
+                <CardTitle className="text-white">Online Service</CardTitle>
                 <CardDescription className="text-gray-300">
-                  Our headquarters (by appointment only)
+                  Fully digital platform accessible worldwide
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-purple-400 font-semibold">
-                  123 Tech Avenue<br />
-                  San Francisco, CA 94105<br />
-                  United States
-                </p>
+                <p className="text-purple-400 font-semibold">100% Online Platform</p>
+                <p className="text-gray-300 text-sm mt-2">Available globally through secure web access</p>
               </CardContent>
             </Card>
           </div>
@@ -220,7 +204,7 @@ const Contact = () => {
               <CardHeader>
                 <CardTitle className="text-white">Is CatchFinder really free?</CardTitle>
                 <CardDescription className="text-gray-300">
-                  Yes! Our basic investigation services are completely free. We believe everyone deserves access to the truth.
+                  Yes! Our digital investigation services are completely free to use. No hidden fees or premium tiers.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -229,7 +213,7 @@ const Contact = () => {
               <CardHeader>
                 <CardTitle className="text-white">How accurate are your results?</CardTitle>
                 <CardDescription className="text-gray-300">
-                  Our AI-powered system maintains a 98% accuracy rate using advanced facial recognition and data matching algorithms.
+                  Results depend on available public data. We search multiple platforms but cannot guarantee 100% accuracy or completeness.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -238,7 +222,7 @@ const Contact = () => {
               <CardHeader>
                 <CardTitle className="text-white">Is my search private?</CardTitle>
                 <CardDescription className="text-gray-300">
-                  Absolutely. All searches are anonymous, encrypted, and we never store your personal data or search history.
+                  Yes. All searches are conducted privately and we don't store your search data or uploaded images permanently.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -247,7 +231,7 @@ const Contact = () => {
               <CardHeader>
                 <CardTitle className="text-white">What platforms do you search?</CardTitle>
                 <CardDescription className="text-gray-300">
-                  We search across 50+ platforms including dating sites, social media, adult content sites, and professional networks.
+                  We search across social media platforms, dating sites, and publicly available records using reverse image search and data matching.
                 </CardDescription>
               </CardHeader>
             </Card>
