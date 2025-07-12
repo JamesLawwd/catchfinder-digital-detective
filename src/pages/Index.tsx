@@ -1,8 +1,5 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Shield, Search, Camera, Phone, Eye, AlertTriangle, CheckCircle, Users, Zap, Lock, Globe } from "lucide-react";
@@ -15,27 +12,46 @@ const Index = () => {
   const [activeTab, setActiveTab] = useState("home");
   const [isSearching, setIsSearching] = useState(false);
   const [profilesScanned, setProfilesScanned] = useState(0);
+  const [searchResults, setSearchResults] = useState<any>(null);
+  const [searchType, setSearchType] = useState<'photo' | 'phone'>('photo');
   const navigate = useNavigate();
 
-  const handleSearch = async (type: "photo" | "phone", data: string) => {
+  const handleSearch = async (type: "photo" | "phone", data: any) => {
     setIsSearching(true);
+    setSearchType(type);
     
     toast({
       title: "Search Initiated",
-      description: "Starting comprehensive background check across platforms...",
+      description: `Starting ${type === 'photo' ? 'image analysis' : 'phone lookup'}...`,
     });
     
-    // Simulate real search process - this would be replaced with actual API calls
+    // Simulate processing time for better UX
     setTimeout(() => {
       setIsSearching(false);
+      setSearchResults(data);
       setActiveTab("results");
-      // Increment profile count only after actual search
-      setProfilesScanned(prev => prev + 1);
-      toast({
-        title: "Search Complete",
-        description: "Background check completed. Results available in dashboard.",
-      });
-    }, 3000);
+      
+      // Only increment count if we found results
+      if (data?.success && data?.data?.searchResults?.length > 0) {
+        setProfilesScanned(prev => prev + data.data.searchResults.length);
+      }
+      
+      if (data?.success) {
+        const resultCount = data?.data?.searchResults?.length || 0;
+        toast({
+          title: "Search Complete",
+          description: resultCount > 0 
+            ? `Found ${resultCount} potential matches`
+            : "No matches found for your search",
+        });
+      } else {
+        toast({
+          title: "Search Failed",
+          description: data?.error || "Unable to complete search",
+          variant: "destructive",
+        });
+      }
+    }, 2000);
   };
 
   return (
@@ -125,15 +141,15 @@ const Index = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
                 <div className="text-center">
                   <div className="text-4xl font-bold text-purple-400 mb-2">{profilesScanned}</div>
-                  <div className="text-gray-300">Profiles Searched Today</div>
+                  <div className="text-gray-300">Profiles Found</div>
                 </div>
                 <div className="text-center">
                   <div className="text-4xl font-bold text-pink-400 mb-2">15+</div>
                   <div className="text-gray-300">Platforms Monitored</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-4xl font-bold text-blue-400 mb-2">Free</div>
-                  <div className="text-gray-300">Always Free Service</div>
+                  <div className="text-4xl font-bold text-blue-400 mb-2">100%</div>
+                  <div className="text-gray-300">Free Service</div>
                 </div>
               </div>
             </div>
@@ -260,7 +276,7 @@ const Index = () => {
         </TabsContent>
 
         <TabsContent value="results" className="mt-0">
-          <Dashboard />
+          <Dashboard searchResults={searchResults} searchType={searchType} />
         </TabsContent>
       </Tabs>
     </div>

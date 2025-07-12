@@ -7,15 +7,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { Upload, Phone, Camera, Search, Loader2, Shield, AlertCircle } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { ImageAnalysisService } from "@/services/ImageAnalysisService";
+import { PhoneSearchService } from "@/services/PhoneSearchService";
 
 interface SearchInterfaceProps {
-  onSearch: (type: "photo" | "phone", data: string) => void;
+  onSearch: (type: "photo" | "phone", data: any) => void;
   isSearching: boolean;
 }
 
 const SearchInterface = ({ onSearch, isSearching }: SearchInterfaceProps) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [searchProgress, setSearchProgress] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,7 +41,7 @@ const SearchInterface = ({ onSearch, isSearching }: SearchInterfaceProps) => {
     }
   };
 
-  const handlePhoneSearch = () => {
+  const handlePhoneSearch = async () => {
     if (!phoneNumber.trim()) {
       toast({
         title: "Phone number required",
@@ -47,10 +50,23 @@ const SearchInterface = ({ onSearch, isSearching }: SearchInterfaceProps) => {
       });
       return;
     }
-    onSearch("phone", phoneNumber);
+
+    setSearchProgress("Analyzing phone number...");
+    
+    try {
+      const result = await PhoneSearchService.performPhoneSearch(phoneNumber);
+      onSearch("phone", result);
+    } catch (error) {
+      console.error('Phone search error:', error);
+      toast({
+        title: "Search failed",
+        description: "Unable to complete phone search. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
-  const handleImageSearch = () => {
+  const handleImageSearch = async () => {
     if (!uploadedImage) {
       toast({
         title: "Image required",
@@ -59,7 +75,20 @@ const SearchInterface = ({ onSearch, isSearching }: SearchInterfaceProps) => {
       });
       return;
     }
-    onSearch("photo", uploadedImage);
+
+    setSearchProgress("Analyzing image content...");
+    
+    try {
+      const result = await ImageAnalysisService.performImageSearch(uploadedImage);
+      onSearch("photo", result);
+    } catch (error) {
+      console.error('Image search error:', error);
+      toast({
+        title: "Search failed",
+        description: "Unable to analyze image. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -149,7 +178,7 @@ const SearchInterface = ({ onSearch, isSearching }: SearchInterfaceProps) => {
                     {isSearching ? (
                       <>
                         <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                        Scanning Platforms...
+                        {searchProgress || "Analyzing Image..."}
                       </>
                     ) : (
                       <>
@@ -177,7 +206,7 @@ const SearchInterface = ({ onSearch, isSearching }: SearchInterfaceProps) => {
                       <AlertCircle className="h-5 w-5 text-blue-400 mt-0.5" />
                       <div className="text-sm text-blue-200">
                         <p className="font-medium">Search Scope</p>
-                        <p>We'll search across dating apps, social media, and public records linked to this number.</p>
+                        <p>We'll search across messaging apps, social media, and public records linked to this number.</p>
                       </div>
                     </div>
                   </div>
@@ -190,7 +219,7 @@ const SearchInterface = ({ onSearch, isSearching }: SearchInterfaceProps) => {
                     {isSearching ? (
                       <>
                         <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                        Searching Databases...
+                        {searchProgress || "Searching Databases..."}
                       </>
                     ) : (
                       <>
@@ -218,16 +247,16 @@ const SearchInterface = ({ onSearch, isSearching }: SearchInterfaceProps) => {
           <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
             <CardContent className="p-6 text-center">
               <Search className="h-10 w-10 text-purple-400 mx-auto mb-4" />
-              <h3 className="text-white font-semibold mb-2">Deep Search</h3>
-              <p className="text-gray-300 text-sm">50+ platforms and databases</p>
+              <h3 className="text-white font-semibold mb-2">Real Analysis</h3>
+              <p className="text-gray-300 text-sm">Actual image content detection</p>
             </CardContent>
           </Card>
           
           <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
             <CardContent className="p-6 text-center">
               <AlertCircle className="h-10 w-10 text-yellow-400 mx-auto mb-4" />
-              <h3 className="text-white font-semibold mb-2">Instant Results</h3>
-              <p className="text-gray-300 text-sm">Results in under 60 seconds</p>
+              <h3 className="text-white font-semibold mb-2">Accurate Results</h3>
+              <p className="text-gray-300 text-sm">Results based on actual analysis</p>
             </CardContent>
           </Card>
         </div>

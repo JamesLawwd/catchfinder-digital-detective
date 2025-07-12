@@ -1,10 +1,8 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   Heart, 
@@ -22,73 +20,23 @@ import {
   Mail
 } from "lucide-react";
 
-const Dashboard = () => {
+interface DashboardProps {
+  searchResults?: any;
+  searchType?: 'photo' | 'phone';
+}
+
+const Dashboard = ({ searchResults, searchType }: DashboardProps) => {
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
+  const [displayResults, setDisplayResults] = useState<any[]>([]);
 
-  // Mock data for demonstration
-  const searchResults = [
-    {
-      id: 1,
-      platform: "Tinder",
-      type: "dating",
-      profileName: "Sarah M.",
-      location: "New York, NY",
-      lastActive: "2 days ago",
-      matchScore: 98,
-      imageUrl: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
-      verified: true,
-      status: "active"
-    },
-    {
-      id: 2,
-      platform: "OnlyFans",
-      type: "adult",
-      profileName: "Sarah_NYC",
-      location: "New York, NY",
-      lastActive: "1 day ago",
-      matchScore: 95,
-      imageUrl: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
-      verified: false,
-      status: "premium"
-    },
-    {
-      id: 3,
-      platform: "Instagram",
-      type: "social",
-      profileName: "@sarah.m.nyc",
-      location: "New York, NY",
-      lastActive: "3 hours ago",
-      matchScore: 92,
-      imageUrl: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
-      verified: true,
-      status: "public"
-    },
-    {
-      id: 4,
-      platform: "Bumble",
-      type: "dating",
-      profileName: "Sarah",
-      location: "Manhattan, NY",
-      lastActive: "5 days ago",
-      matchScore: 89,
-      imageUrl: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
-      verified: true,
-      status: "active"
-    },
-    {
-      id: 5,
-      platform: "Facebook",
-      type: "social",
-      profileName: "Sarah Martinez",
-      location: "New York, NY",
-      lastActive: "1 week ago",
-      matchScore: 87,
-      imageUrl: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
-      verified: true,
-      status: "private"
+  useEffect(() => {
+    if (searchResults?.success && searchResults.data?.searchResults) {
+      setDisplayResults(searchResults.data.searchResults);
+    } else {
+      setDisplayResults([]);
     }
-  ];
+  }, [searchResults]);
 
   const getTypeIcon = (type: string) => {
     switch (type) {
@@ -96,6 +44,8 @@ const Dashboard = () => {
         return <Heart className="h-4 w-4" />;
       case "social":
         return <Users className="h-4 w-4" />;
+      case "professional":
+        return <Camera className="h-4 w-4" />;
       case "adult":
         return <Camera className="h-4 w-4" />;
       default:
@@ -109,6 +59,8 @@ const Dashboard = () => {
         return "bg-pink-500/20 text-pink-300 border-pink-500/30";
       case "social":
         return "bg-blue-500/20 text-blue-300 border-blue-500/30";
+      case "professional":
+        return "bg-green-500/20 text-green-300 border-green-500/30";
       case "adult":
         return "bg-red-500/20 text-red-300 border-red-500/30";
       default:
@@ -116,12 +68,75 @@ const Dashboard = () => {
     }
   };
 
-  const filteredResults = searchResults.filter(result => {
+  const filteredResults = displayResults.filter(result => {
     const matchesFilter = selectedFilter === "all" || result.type === selectedFilter;
     const matchesSearch = result.platform.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          result.profileName.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesFilter && matchesSearch;
   });
+
+  const getSearchTypeStats = () => {
+    if (!searchResults?.success) return { dating: 0, social: 0, professional: 0, adult: 0 };
+    
+    const stats = { dating: 0, social: 0, professional: 0, adult: 0 };
+    displayResults.forEach(result => {
+      if (stats.hasOwnProperty(result.type)) {
+        (stats as any)[result.type]++;
+      }
+    });
+    return stats;
+  };
+
+  const stats = getSearchTypeStats();
+  const avgMatchScore = displayResults.length > 0 
+    ? Math.round(displayResults.reduce((sum, result) => sum + result.matchScore, 0) / displayResults.length)
+    : 0;
+
+  const renderSearchInfo = () => {
+    if (!searchResults?.success) return null;
+
+    if (searchType === 'photo' && searchResults.data) {
+      const { imageType, detectedObjects, confidence } = searchResults.data;
+      return (
+        <div className="mb-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+          <h3 className="text-white font-semibold mb-2">Image Analysis Results</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-blue-200">
+            <div>
+              <span className="font-medium">Image Type:</span> {imageType}
+            </div>
+            <div>
+              <span className="font-medium">Confidence:</span> {Math.round(confidence * 100)}%
+            </div>
+            <div>
+              <span className="font-medium">Detected:</span> {detectedObjects.join(', ')}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (searchType === 'phone' && searchResults.data) {
+      const { phoneNumber, carrier, region } = searchResults.data;
+      return (
+        <div className="mb-6 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
+          <h3 className="text-white font-semibold mb-2">Phone Analysis Results</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-green-200">
+            <div>
+              <span className="font-medium">Number:</span> {phoneNumber}
+            </div>
+            <div>
+              <span className="font-medium">Carrier:</span> {carrier}
+            </div>
+            <div>
+              <span className="font-medium">Region:</span> {region}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return null;
+  };
 
   return (
     <div className="min-h-screen py-8 px-4">
@@ -131,99 +146,114 @@ const Dashboard = () => {
           <h1 className="text-4xl font-bold text-white mb-4">Investigation Results</h1>
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center space-x-6">
-              <div className="flex items-center space-x-2">
-                <CheckCircle className="h-5 w-5 text-green-400" />
-                <span className="text-green-400 font-medium">Search Complete</span>
-              </div>
+              {displayResults.length > 0 ? (
+                <div className="flex items-center space-x-2">
+                  <CheckCircle className="h-5 w-5 text-green-400" />
+                  <span className="text-green-400 font-medium">Search Complete</span>
+                </div>
+              ) : (
+                <div className="flex items-center space-x-2">
+                  <AlertTriangle className="h-5 w-5 text-yellow-400" />
+                  <span className="text-yellow-400 font-medium">No Results Found</span>
+                </div>
+              )}
               <div className="text-gray-300">
-                Found <span className="text-white font-semibold">{searchResults.length}</span> matches across <span className="text-white font-semibold">8</span> platforms
+                Found <span className="text-white font-semibold">{displayResults.length}</span> matches
               </div>
             </div>
-            <Button className="bg-purple-600 hover:bg-purple-700">
-              <Download className="mr-2 h-4 w-4" />
-              Export Report
-            </Button>
+            {displayResults.length > 0 && (
+              <Button className="bg-purple-600 hover:bg-purple-700">
+                <Download className="mr-2 h-4 w-4" />
+                Export Report
+              </Button>
+            )}
           </div>
         </div>
 
+        {renderSearchInfo()}
+
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card className="bg-gradient-to-r from-pink-500/10 to-red-500/10 border-pink-500/20">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-pink-300 text-sm font-medium">Dating Platforms</p>
-                  <p className="text-2xl font-bold text-white">2</p>
+        {displayResults.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <Card className="bg-gradient-to-r from-pink-500/10 to-red-500/10 border-pink-500/20">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-pink-300 text-sm font-medium">Dating Platforms</p>
+                    <p className="text-2xl font-bold text-white">{stats.dating}</p>
+                  </div>
+                  <Heart className="h-8 w-8 text-pink-400" />
                 </div>
-                <Heart className="h-8 w-8 text-pink-400" />
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
 
-          <Card className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-blue-500/20">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-blue-300 text-sm font-medium">Social Media</p>
-                  <p className="text-2xl font-bold text-white">2</p>
+            <Card className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-blue-500/20">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-blue-300 text-sm font-medium">Social Media</p>
+                    <p className="text-2xl font-bold text-white">{stats.social}</p>
+                  </div>
+                  <Users className="h-8 w-8 text-blue-400" />
                 </div>
-                <Users className="h-8 w-8 text-blue-400" />
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
 
-          <Card className="bg-gradient-to-r from-red-500/10 to-orange-500/10 border-red-500/20">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-red-300 text-sm font-medium">Adult Content</p>
-                  <p className="text-2xl font-bold text-white">1</p>
+            <Card className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border-green-500/20">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-green-300 text-sm font-medium">Professional</p>
+                    <p className="text-2xl font-bold text-white">{stats.professional}</p>
+                  </div>
+                  <Camera className="h-8 w-8 text-green-400" />
                 </div>
-                <AlertTriangle className="h-8 w-8 text-red-400" />
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
 
-          <Card className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border-green-500/20">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-green-300 text-sm font-medium">Match Score</p>
-                  <p className="text-2xl font-bold text-white">94%</p>
+            <Card className="bg-gradient-to-r from-purple-500/10 to-violet-500/10 border-purple-500/20">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-purple-300 text-sm font-medium">Avg Match Score</p>
+                    <p className="text-2xl font-bold text-white">{avgMatchScore}%</p>
+                  </div>
+                  <CheckCircle className="h-8 w-8 text-purple-400" />
                 </div>
-                <CheckCircle className="h-8 w-8 text-green-400" />
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
 
         {/* Filters and Search */}
-        <Card className="bg-white/5 border-white/10 backdrop-blur-sm mb-8">
-          <CardContent className="p-6">
-            <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-              <div className="flex items-center space-x-4 flex-1">
-                <Filter className="h-5 w-5 text-gray-400" />
-                <Select value={selectedFilter} onValueChange={setSelectedFilter}>
-                  <SelectTrigger className="w-48 bg-white/10 border-white/20 text-white">
-                    <SelectValue placeholder="Filter by type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Platforms</SelectItem>
-                    <SelectItem value="dating">Dating Apps</SelectItem>
-                    <SelectItem value="social">Social Media</SelectItem>
-                    <SelectItem value="adult">Adult Content</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Input
-                  placeholder="Search results..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="max-w-sm bg-white/10 border-white/20 text-white placeholder:text-gray-400"
-                />
+        {displayResults.length > 0 && (
+          <Card className="bg-white/5 border-white/10 backdrop-blur-sm mb-8">
+            <CardContent className="p-6">
+              <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+                <div className="flex items-center space-x-4 flex-1">
+                  <Filter className="h-5 w-5 text-gray-400" />
+                  <Select value={selectedFilter} onValueChange={setSelectedFilter}>
+                    <SelectTrigger className="w-48 bg-white/10 border-white/20 text-white">
+                      <SelectValue placeholder="Filter by type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Platforms</SelectItem>
+                      <SelectItem value="dating">Dating Apps</SelectItem>
+                      <SelectItem value="social">Social Media</SelectItem>
+                      <SelectItem value="professional">Professional</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Input
+                    placeholder="Search results..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="max-w-sm bg-white/10 border-white/20 text-white placeholder:text-gray-400"
+                  />
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Results */}
         <div className="space-y-6">
@@ -298,11 +328,26 @@ const Dashboard = () => {
           ))}
         </div>
 
-        {filteredResults.length === 0 && (
+        {filteredResults.length === 0 && displayResults.length === 0 && (
           <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
             <CardContent className="p-12 text-center">
               <AlertTriangle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-white mb-2">No Results Found</h3>
+              <p className="text-gray-300">
+                {searchType === 'photo' 
+                  ? "No human faces detected in the uploaded image, or no matching profiles found."
+                  : "No profiles found associated with this phone number."
+                }
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
+        {filteredResults.length === 0 && displayResults.length > 0 && (
+          <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
+            <CardContent className="p-12 text-center">
+              <AlertTriangle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-white mb-2">No Matching Results</h3>
               <p className="text-gray-300">
                 No matches found for your current search criteria. Try adjusting your filters.
               </p>
