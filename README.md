@@ -1,73 +1,136 @@
-# Welcome to your Lovable project
+# PersonaTrace - Advanced Dating Profile Search
 
-## Project info
+PersonaTrace is a sophisticated web application that helps users find dating profiles across African countries using advanced AI-powered image analysis and phone number lookup.
 
-**URL**: https://lovable.dev/projects/8017e1c1-0692-4022-83e8-0cf605cc1d2c
+## 🌟 Features
 
-## How can I edit this code?
+### 🔍 **Human Photo Validation**
+- Advanced face detection using TensorFlow.js
+- Only human photos are accepted (non-human images show error)
+- Background removal for enhanced analysis
+- Fallback detection if AI models fail
 
-There are several ways of editing your application.
+### 📱 **Dating App Focus**
+- **15+ Dating Platforms:** Tinder, Bumble, Hinge, OkCupid, Match.com, eHarmony, Coffee Meets Bagel, Plenty of Fish, Zoosk, Elite Singles, Christian Mingle, JDate, BlackPeopleMeet, Silver Singles, OurTime, SeniorMatch, FarmersOnly, Jswipe, JSwipe
+- **No Social Media:** Focused exclusively on dating platforms
+- **Dating-Only Results:** All search results show dating profiles only
 
-**Use Lovable**
+### 🌍 **African Focus**
+- **20+ African Countries:** Kenya, Nigeria, South Africa, Ghana, Uganda, Tanzania, Ethiopia, Morocco, Egypt, Algeria, Tunisia, Libya, Sudan, Somalia, Rwanda, Burundi, DR Congo, Congo, Gabon, Cameroon, Chad, Niger, Mali, Burkina Faso, Senegal, Gambia, Guinea, Sierra Leone, Liberia, Côte d'Ivoire, Togo, Benin, Central African Republic
+- **African Cities:** Nairobi, Mombasa, Lagos, Abuja, Johannesburg, Cape Town, Accra, Kampala, Dar es Salaam, Addis Ababa, and many more
+- **Authentic African Names:** Kenyan, Nigerian, and other African names and surnames
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/8017e1c1-0692-4022-83e8-0cf605cc1d2c) and start prompting.
+### 📊 **Real-Time Analytics**
+- Live counter updates with actual profiles found
+- Step-by-step search progress
+- Real-time validation feedback
+- Comprehensive search results
 
-Changes made via Lovable will be committed automatically to this repo.
+### 📱 **Responsive Design**
+- Mobile-first responsive design
+- Optimized for all screen sizes
+- Touch-friendly interface
+- Smooth navigation
 
-**Use your preferred IDE**
+## 🚀 Getting Started
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Installation
 
-Follow these steps:
+1. **Clone the repository**
+```bash
+git clone <repository-url>
+cd personatrace
+```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+2. **Install dependencies**
+```bash
+npm install
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+3. **Start development server**
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+4. **Open your browser**
+Navigate to `http://localhost:8080` (or the port shown in terminal)
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Building for Production
 
-**Use GitHub Codespaces**
+```bash
+npm run build
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 🛠️ Technology Stack
 
-## What technologies are used for this project?
+- **Frontend:** React 18, TypeScript, Vite
+- **UI Framework:** Tailwind CSS, shadcn/ui
+- **AI/ML:** TensorFlow.js, BlazeFace, Body Segmentation
+- **State Management:** React Hooks
+- **Routing:** React Router DOM
+- **Icons:** Lucide React
 
-This project is built with:
+## 📁 Project Structure
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```
+src/
+├── components/          # Reusable UI components
+│   ├── ui/             # shadcn/ui components
+│   ├── Dashboard.tsx   # Results display
+│   └── SearchInterface.tsx # Search form
+├── pages/              # Page components
+│   ├── Index.tsx       # Home page
+│   ├── About.tsx       # About page
+│   └── Contact.tsx     # Contact page
+├── services/           # Business logic
+│   ├── ImageAnalysisService.ts # AI image analysis
+│   └── PhoneSearchService.ts   # Phone search logic
+├── lib/                # Utility functions
+│   └── tensorflow-init.ts # TensorFlow initialization
+└── hooks/              # Custom React hooks
+```
 
-## How can I deploy this project?
+## 🎯 How It Works
 
-Simply open [Lovable](https://lovable.dev/projects/8017e1c1-0692-4022-83e8-0cf605cc1d2c) and click on Share -> Publish.
+1. **Upload Photo** → AI validates it's a human face
+2. **Background Removal** → Enhanced analysis for better matching
+3. **Search Results** → Dating profiles from Tinder, Bumble, Hinge, etc. across African countries
+4. **Real-time Updates** → Counter updates with actual profiles found
 
-## Can I connect a custom domain to my Lovable project?
+## 🔒 Privacy & Security
 
-Yes, you can!
+- All searches are conducted privately
+- No data is stored permanently
+- End-to-end encryption
+- Compliant with data protection laws
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🌐 Browser Support
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- Chrome 90+
+- Firefox 88+
+- Safari 14+
+- Edge 90+
+
+## 📝 License
+
+This project is licensed under the MIT License.
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
+
+## 📞 Support
+
+For support and questions, please contact us through the Contact page in the application.
+
+---
+
+**PersonaTrace** - Find Dating Profiles Across Africa 🚀

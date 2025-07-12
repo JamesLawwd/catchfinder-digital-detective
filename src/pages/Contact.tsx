@@ -18,12 +18,17 @@ const Contact = () => {
     message: ""
   });
 
+  // Replace the form handler with Formspree
+  // Get your Formspree endpoint: https://formspree.io/f/{yourFormId}
+  // For first-time use, use the default endpoint and confirm via email
+  const FORMSPREE_ENDPOINT = "https://formspree.io/f/mnqewqzv"; // Replace with your Formspree form ID if you want a custom one
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Message Sent!",
-      description: "Thank you for contacting us. We'll get back to you within 24 hours.",
-    });
+    // toast({
+    //   title: "Message Sent!",
+    //   description: "Thank you for contacting us. We'll get back to you within 24 hours.",
+    // });
     setFormData({ name: "", email: "", subject: "", message: "" });
   };
 
@@ -39,7 +44,7 @@ const Contact = () => {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2 cursor-pointer" onClick={() => navigate('/')}>
               <Shield className="h-8 w-8 text-purple-400" />
-              <span className="text-2xl font-bold text-white">CatchFinder</span>
+              <span className="text-xl md:text-2xl font-bold text-white">PersonaTrace</span>
             </div>
             <div className="flex items-center space-x-4">
               <Button 
@@ -73,11 +78,11 @@ const Contact = () => {
           <h1 className="text-5xl font-bold text-white mb-6">
             Contact
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
-              {" "}CatchFinder
+              {" "}PersonaTrace
             </span>
           </h1>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Have questions about our services? Need technical support? Want to report an issue? 
+            Have questions about our dating profile search services? Need technical support? Want to report an issue? 
             We're here to help you through our online support channels.
           </p>
         </div>
@@ -93,11 +98,16 @@ const Contact = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form 
+                action={FORMSPREE_ENDPOINT}
+                method="POST"
+                className="space-y-6"
+              >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-white mb-2">Name</label>
                     <Input
+                      name="name"
                       value={formData.name}
                       onChange={(e) => handleInputChange("name", e.target.value)}
                       className="bg-white/10 border-white/20 text-white placeholder-gray-400"
@@ -109,6 +119,7 @@ const Contact = () => {
                     <label className="block text-white mb-2">Email</label>
                     <Input
                       type="email"
+                      name="email"
                       value={formData.email}
                       onChange={(e) => handleInputChange("email", e.target.value)}
                       className="bg-white/10 border-white/20 text-white placeholder-gray-400"
@@ -120,6 +131,7 @@ const Contact = () => {
                 <div>
                   <label className="block text-white mb-2">Subject</label>
                   <Input
+                    name="subject"
                     value={formData.subject}
                     onChange={(e) => handleInputChange("subject", e.target.value)}
                     className="bg-white/10 border-white/20 text-white placeholder-gray-400"
@@ -130,6 +142,7 @@ const Contact = () => {
                 <div>
                   <label className="block text-white mb-2">Message</label>
                   <Textarea
+                    name="message"
                     value={formData.message}
                     onChange={(e) => handleInputChange("message", e.target.value)}
                     className="bg-white/10 border-white/20 text-white placeholder-gray-400 min-h-32"
@@ -137,6 +150,10 @@ const Contact = () => {
                     required
                   />
                 </div>
+                {/* Formspree success message */}
+                <input type="hidden" name="_subject" value="PersonaTrace Contact Form" />
+                <input type="hidden" name="_replyto" value={formData.email} />
+                <input type="hidden" name="_next" value="/contact?success=1" />
                 <Button 
                   type="submit"
                   className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
@@ -144,6 +161,12 @@ const Contact = () => {
                   Send Message
                 </Button>
               </form>
+              {/* Show a success message if redirected with ?success=1 */}
+              {typeof window !== 'undefined' && window.location.search.includes('success=1') && (
+                <div className="mt-4 p-4 bg-green-500/10 border border-green-500/20 rounded text-green-300 text-center">
+                  Message sent! Thank you for contacting us. We'll get back to you within 24 hours.
+                </div>
+              )}
             </CardContent>
           </Card>
 
@@ -158,7 +181,7 @@ const Contact = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-purple-400 font-semibold">support@catchfinder.com</p>
+                <p className="text-purple-400 font-semibold">jleo5621@gmail.com</p>
                 <p className="text-gray-300 text-sm mt-2">Response time: Within 24 hours</p>
               </CardContent>
             </Card>
@@ -202,9 +225,9 @@ const Contact = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle className="text-white">Is CatchFinder really free?</CardTitle>
+                <CardTitle className="text-white">Is PersonaTrace really free?</CardTitle>
                 <CardDescription className="text-gray-300">
-                  Yes! Our digital investigation services are completely free to use. No hidden fees or premium tiers.
+                  Yes! Our dating profile search services are completely free to use. No hidden fees or premium tiers.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -213,7 +236,7 @@ const Contact = () => {
               <CardHeader>
                 <CardTitle className="text-white">How accurate are your results?</CardTitle>
                 <CardDescription className="text-gray-300">
-                  Results depend on available public data. We search multiple platforms but cannot guarantee 100% accuracy or completeness.
+                  Results depend on available public data. We search multiple dating platforms but cannot guarantee 100% accuracy or completeness.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -229,9 +252,9 @@ const Contact = () => {
 
             <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle className="text-white">What platforms do you search?</CardTitle>
+                <CardTitle className="text-white">What dating platforms do you search?</CardTitle>
                 <CardDescription className="text-gray-300">
-                  We search across social media platforms, dating sites, and publicly available records using reverse image search and data matching.
+                  We search across major dating platforms including Tinder, Bumble, Hinge, OkCupid, Match.com, and many others across African countries.
                 </CardDescription>
               </CardHeader>
             </Card>

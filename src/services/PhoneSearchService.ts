@@ -78,31 +78,85 @@ export class PhoneSearchService {
   }
   
   private static generatePhoneSearchResults(phoneNumber: string): SearchResult[] {
-    // For demo purposes, generate 0-2 results for phone searches
-    const numResults = Math.floor(Math.random() * 3); // 0-2 results
+    // Focus only on dating platforms
+    const datingPlatforms = [
+      'Tinder', 'Bumble', 'Hinge', 'OkCupid', 'Match.com', 'eHarmony', 
+      'Coffee Meets Bagel', 'Plenty of Fish', 'Zoosk', 'Elite Singles',
+      'Christian Mingle', 'JDate', 'BlackPeopleMeet', 'Silver Singles',
+      'OurTime', 'SeniorMatch', 'FarmersOnly', 'Jswipe', 'JSwipe'
+    ];
     
-    if (numResults === 0) {
-      console.log('No profiles found for this phone number');
-      return [];
-    }
+    // Include African names and locations
+    const firstNames = [
+      // Kenyan names
+      'Amina', 'Fatima', 'Hassan', 'Ali', 'Mariam', 'Ahmed', 'Zainab', 'Omar',
+      'Aisha', 'Khalid', 'Naima', 'Yusuf', 'Halima', 'Abdullah', 'Safiya', 'Ibrahim',
+      // Other African names
+      'Chioma', 'Kemi', 'Adebayo', 'Folake', 'Tunde', 'Bisi', 'Kemi', 'Ayo',
+      'Ngozi', 'Chukwudi', 'Ifeoma', 'Emeka', 'Zainab', 'Mariam', 'Hassan', 'Fatima',
+      // International names for variety
+      'Alex', 'Jordan', 'Casey', 'Morgan', 'Riley', 'Taylor', 'Jamie', 'Avery'
+    ];
     
-    const platforms = ['WhatsApp', 'Telegram', 'Signal', 'Facebook', 'LinkedIn'];
-    const names = ['Contact', 'User', 'Profile', 'Account'];
+    const lastNames = [
+      // Kenyan surnames
+      'Ochieng', 'Odhiambo', 'Onyango', 'Otieno', 'Ouma', 'Owino', 'Owuor', 'Onyango',
+      'Wanjiku', 'Wanjiru', 'Wambui', 'Wambugu', 'Wamalwa', 'Wamae', 'Wamalwa', 'Wanjala',
+      // Other African surnames
+      'Adebayo', 'Okechukwu', 'Nwachukwu', 'Eze', 'Okafor', 'Okonkwo', 'Nwankwo', 'Ezechi',
+      'Obi', 'Nwosu', 'Okeke', 'Onyeka', 'Ezeogu', 'Nwabueze', 'Okoro', 'Nwankwo',
+      // International surnames
+      'Smith', 'Johnson', 'Brown', 'Davis', 'Miller', 'Wilson', 'Moore', 'Taylor'
+    ];
+    
+    // Include African cities and countries
+    const africanCities = [
+      // Kenya
+      'Nairobi', 'Mombasa', 'Kisumu', 'Nakuru', 'Eldoret', 'Thika', 'Malindi', 'Kitale',
+      // Nigeria
+      'Lagos', 'Abuja', 'Kano', 'Ibadan', 'Port Harcourt', 'Kaduna', 'Enugu', 'Calabar',
+      // South Africa
+      'Johannesburg', 'Cape Town', 'Durban', 'Pretoria', 'Port Elizabeth', 'Bloemfontein',
+      // Ghana
+      'Accra', 'Kumasi', 'Tamale', 'Sekondi-Takoradi', 'Ashaiman', 'Sunyani',
+      // Uganda
+      'Kampala', 'Gulu', 'Lira', 'Mbarara', 'Jinja', 'Arua',
+      // Tanzania
+      'Dar es Salaam', 'Mwanza', 'Arusha', 'Dodoma', 'Mbeya', 'Morogoro',
+      // Ethiopia
+      'Addis Ababa', 'Dire Dawa', 'Mekelle', 'Gondar', 'Bahir Dar', 'Hawassa'
+    ];
+    
+    const africanCountries = [
+      'Kenya', 'Nigeria', 'South Africa', 'Ghana', 'Uganda', 'Tanzania', 'Ethiopia',
+      'Morocco', 'Egypt', 'Algeria', 'Tunisia', 'Libya', 'Sudan', 'Somalia',
+      'Rwanda', 'Burundi', 'DR Congo', 'Congo', 'Gabon', 'Cameroon', 'Chad',
+      'Niger', 'Mali', 'Burkina Faso', 'Senegal', 'Gambia', 'Guinea', 'Sierra Leone',
+      'Liberia', 'Côte d\'Ivoire', 'Togo', 'Benin', 'Central African Republic'
+    ];
+    
     const results: SearchResult[] = [];
+    const numResults = Math.floor(Math.random() * 3) + 1; // 1-3 results for phone searches
     
     for (let i = 0; i < numResults; i++) {
-      const platform = platforms[Math.floor(Math.random() * platforms.length)];
+      const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+      const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+      const platform = datingPlatforms[Math.floor(Math.random() * datingPlatforms.length)];
+      const city = africanCities[Math.floor(Math.random() * africanCities.length)];
+      const country = africanCountries[Math.floor(Math.random() * africanCountries.length)];
+      
       results.push({
         id: `phone_${Date.now()}_${i}`,
         platform,
-        type: platform === 'LinkedIn' ? 'professional' : 'social',
-        profileName: `${names[Math.floor(Math.random() * names.length)]} ${Math.floor(Math.random() * 9999)}`,
-        location: 'Location Hidden',
-        lastActive: `${Math.floor(Math.random() * 7) + 1} days ago`,
-        matchScore: Math.floor(Math.random() * 20) + 80, // 80-100% for phone matches
+        type: 'dating',
+        profileName: `${firstName} ${lastName[0]}.`,
+        location: `${city}, ${country}`,
+        lastActive: `${Math.floor(Math.random() * 14) + 1} days ago`,
+        matchScore: Math.floor(Math.random() * 30) + 65, // 65-95% for phone matches
         imageUrl: `https://images.unsplash.com/photo-${1500000000000 + Math.floor(Math.random() * 100000000)}?w=150&h=150&fit=crop&crop=face`,
-        verified: Math.random() > 0.5,
-        status: 'private' // Phone searches typically return private profiles
+        verified: Math.random() > 0.7,
+        status: ['active', 'online', 'recently active'][Math.floor(Math.random() * 3)],
+        similarity: Math.floor(Math.random() * 35) + 65
       });
     }
     

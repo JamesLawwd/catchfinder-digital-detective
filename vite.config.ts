@@ -17,6 +17,10 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      '@mediapipe/selfie_segmentation': path.resolve(
+        __dirname,
+        'node_modules/@mediapipe/selfie_segmentation'
+      ),
     },
   },
 }));
