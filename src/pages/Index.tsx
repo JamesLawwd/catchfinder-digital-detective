@@ -5,14 +5,16 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Shield, Search, Camera, Phone, Eye, AlertTriangle, CheckCircle, Users, Zap } from "lucide-react";
+import { Shield, Search, Camera, Phone, Eye, AlertTriangle, CheckCircle, Users, Zap, Lock, Globe } from "lucide-react";
 import SearchInterface from "@/components/SearchInterface";
 import Dashboard from "@/components/Dashboard";
 import { toast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("home");
   const [isSearching, setIsSearching] = useState(false);
+  const navigate = useNavigate();
 
   const handleSearch = async (type: "photo" | "phone", data: string) => {
     setIsSearching(true);
@@ -43,11 +45,19 @@ const Index = () => {
               <span className="text-2xl font-bold text-white">CatchFinder</span>
             </div>
             <div className="flex items-center space-x-4">
-              <Button variant="ghost" className="text-white hover:text-purple-300">
+              <Button 
+                variant="ghost" 
+                className="text-white hover:text-purple-300"
+                onClick={() => navigate('/about')}
+              >
                 About
               </Button>
-              <Button variant="ghost" className="text-white hover:text-purple-300">
-                Pricing
+              <Button 
+                variant="ghost" 
+                className="text-white hover:text-purple-300"
+                onClick={() => navigate('/contact')}
+              >
+                Contact
               </Button>
               <Button className="bg-purple-600 hover:bg-purple-700 text-white">
                 Get Started
@@ -70,7 +80,7 @@ const Index = () => {
             <div className="max-w-6xl mx-auto text-center">
               <div className="mb-8">
                 <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/30 mb-4">
-                  Advanced Digital Investigation Platform
+                  Advanced Digital Investigation Platform - 100% Free
                 </Badge>
                 <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
                   Uncover Hidden
@@ -190,6 +200,32 @@ const Index = () => {
             </div>
           </section>
 
+          {/* Trust & Security Section */}
+          <section className="py-20 px-4">
+            <div className="max-w-6xl mx-auto">
+              <h2 className="text-4xl font-bold text-white text-center mb-12">
+                Your Privacy is Our Priority
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                <div className="text-center">
+                  <Lock className="h-16 w-16 text-green-400 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-white mb-2">End-to-End Encryption</h3>
+                  <p className="text-gray-300">All data is encrypted and never stored on our servers</p>
+                </div>
+                <div className="text-center">
+                  <Globe className="h-16 w-16 text-blue-400 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-white mb-2">Global Coverage</h3>
+                  <p className="text-gray-300">Search across international platforms and databases</p>
+                </div>
+                <div className="text-center">
+                  <CheckCircle className="h-16 w-16 text-purple-400 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-white mb-2">100% Legal</h3>
+                  <p className="text-gray-300">All searches comply with privacy laws and regulations</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* CTA Section */}
           <section className="py-20 px-4">
             <div className="max-w-4xl mx-auto text-center">
@@ -197,7 +233,7 @@ const Index = () => {
                 Protect Your Peace of Mind
               </h2>
               <p className="text-xl text-gray-300 mb-8">
-                Don't let uncertainty control your life. Get the truth with CatchFinder's advanced investigation tools.
+                Don't let uncertainty control your life. Get the truth with CatchFinder's advanced investigation tools - completely free.
               </p>
               <Button 
                 size="lg"
